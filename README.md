@@ -21,7 +21,7 @@ Mod loader and tools for **Haydee** (the game) and its map editor **Edith** (or 
 
 - **DLL injection** — injects mod DLLs into edith.exe at runtime
 - **Auto-backup hook** — backs up files before saving (prevents crash corruption)
-- **90-degree rotation snap** — patches rotation step from 15° to 90° (CSGs + slight snap on meshes)
+- **90-degree rotation snap** - patches rotation step from 15 to 90 degrees (all objects, requires binary patch)
 - **Crash recovery** — auto-restores corrupted .edith files after a crash
 - **Custom packer** — create .pack files from folder structures
 - **Audio converter** — convert .ogg/.mp3 to Haydee .sound format
@@ -68,6 +68,7 @@ See `modloader/payload.c` for an example of how hooks work.
 | `crash_recovery.py` | Auto-restores corrupted files after crash |
 | `packer.py` | Creates .pack files from folders |
 | `convert_all.py` | Batch converts audio to Haydee format |
+| patch_edith.py | Patches edith.exe for 90-degree rotation snap |
 
 ## Documentation
 
