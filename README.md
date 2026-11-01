@@ -25,6 +25,9 @@ Mod loader and tools for **Haydee** (the game) and its map editor **Edith** (or 
 
 - **DLL injection** — injects mod DLLs into edith.exe at runtime
 - **Auto-backup hook** — backs up files before saving (prevents crash corruption)
+- **Folder watcher** — real-time backup of .edith/.scene files, catches explorer overwrites
+- **Git auto-commit** — tracks map changes, rollback to any point in time
+- **Cloud sync** — mirrors backups to OneDrive for offsite safety
 - **90-degree rotation snap** - patches rotation step from 15 to 90 degrees (all objects, requires binary patch)
 - **Crash recovery** — auto-restores corrupted .edith files after a crash
 - **Custom packer** — create .pack files from folder structures
@@ -69,7 +72,12 @@ See `modloader/payload.c` for an example of how hooks work.
 | `eml_installer.py` | One-click installer |
 | `injector.exe` | DLL injector for edith.exe |
 | `auto_backup.py` | Watches .edith files, backs up on change |
+| `folder_watcher.py` | Real-time backup of .edith/.scene files (catches explorer overwrites) |
 | `crash_recovery.py` | Auto-restores corrupted files after crash |
+| `git_auto_commit.py` | Auto-commits map changes to git every 5 min |
+| `cloud_sync.py` | Syncs backups to OneDrive/cloud |
+| `director_view.js` | Web-based director graph viewer (pan/zoom/click for details) |
+| `director_parse.js` | CLI parser for director graphs |
 | `packer.py` | Creates .pack files from folders |
 | `convert_all.py` | Batch converts audio to Haydee format |
 | patch_edith.py | Patches edith.exe for 90-degree rotation snap |
