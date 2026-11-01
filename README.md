@@ -14,8 +14,6 @@
 > **NOTE:** EML is highly in beta. The installer is not yet available — the modloader is not fully complete. Use the manual setup instructions below.
 
 
-> **NOTE:** EML is highly in beta. The installer is not yet available — the modloader is not fully complete. Use the manual setup instructions below.
-
 
 ---
 
