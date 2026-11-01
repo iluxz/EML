@@ -83,7 +83,7 @@ Haydee is developed by Haydee Interactive. This is an unofficial modding tool.
 ---
 
 <div align="center">
-  <p>built with <code>:3</code> and a concerning amount of coffee</p>
+  <p>built with <code>:3</code> and a concerning amount of coffee..... and also a tiny bit of vibe coding</p>
   <p>
     <a href="https://github.com/iluxz/EML">github.com/iluxz/EML</a>
   </p>
