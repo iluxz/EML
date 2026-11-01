@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/mini_logo.png" alt="EML" width="128">
   <br>
-  <small><i>logo drawn by my friend men, don't ask her for another one she'll say no</i></small>
+  <small><i>the logo was drawn by mennymenmen she very cool gooby this gooby that</i></small>
   <br><br>
   <p><strong>Edith Mod Loader for Haydee</strong></p>
   <p>
