@@ -15,7 +15,7 @@
 
 # EML - Edith Mod Loader
 
-Mod loader and tools for **Haydee** (the game), built by reverse engineering `edith.exe` and `haydee.dll`.
+Mod loader and tools for **Haydee** (the game) and its map editor **Edith** (or engine, i geniunely dont know i cant differentiate the two), built by reverse engineering `edith.exe` and `haydee.dll`.
 
 ## Features
 
