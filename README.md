@@ -47,6 +47,17 @@ The installer will:
 
 Place additional mod DLLs in `Haydee\Mods\`.
 
+## Mod Usage
+
+Mods are DLL files placed in the `Haydee\Mods\` folder. EML injects all `.dll` files found there on startup.
+
+To create your own mod:
+1. Write a C/C++ DLL that hooks functions in edith.exe or haydee.dll
+2. Use `injector.exe edith.exe your_mod.dll` to test
+3. Place the DLL in `Haydee\Mods\` for auto-loading
+
+See `modloader/payload.c` for an example of how hooks work.
+
 ## Tools
 
 | Tool | Description |
