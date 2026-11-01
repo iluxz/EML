@@ -1,0 +1,34 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build binaries
+        run: |
+          cl /O2 /Fe:injector.exe modloader/injector.c
+          cl /LD /O2 /Fe:payload.dll modloader/payload.c
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            injector.exe
+            payload.dll
+            eml_installer.py
+            tools/auto_backup.py
+            tools/crash_recovery.py
+            tools/packer.py
+            tools/convert_all.py
+          generate_release_notes: true

@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build injector
+        run: |
+          cl /O2 /Fe:injector.exe modloader/injector.c
+
+      - name: Build payload
+        run: |
+          cl /LD /O2 /Fe:payload.dll modloader/payload.c
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: eml-binaries
+          path: |
+            injector.exe
+            payload.dll
