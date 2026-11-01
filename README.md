@@ -1,5 +1,7 @@
 # EML - Edith Mod Loader
 
+![EML Banner](assets/eml_logo.png)
+
 ![EML Logo](assets/mini_logo.png)
 
 Mod loader and tools for **Haydee** (the game), built by reverse engineering `edith.exe` and `haydee.dll`.

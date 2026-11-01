@@ -175,6 +175,8 @@ print("  EML - Edith Mod Loader")
 print("  for Haydee")
 print("=" * 50)
 print()
+print("  [EML Logo: assets/eml_logo.png]")
+print()
 print("Welcome! This installer will set up EML in your Haydee folder.")
 print()
 
