@@ -5,9 +5,12 @@ Place mod DLLs here. The EML launcher will inject all `.dll` files in this folde
 ## Included Mods
 
 ### EML_core.dll
-- **90-degree rotation snap** — snaps rotations to 90° increments (CSGs + meshes)
+- **90-degree rotation snap** — CSGs snap to 90° (via binary patch), meshes get slight snap (via hook)
 - **Auto-backup hook** — creates `.bak` copies before file writes
 - **Crash protection** — prevents file corruption on crash
+
+Note: Full 90° snap requires the binary patch to edith.exe (15.0 → 90.0).
+The DLL hook alone provides partial snapping.
 
 ## Creating Your Own Mod
 
