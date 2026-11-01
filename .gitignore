@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ghidra
+*.gpr
+*.rep
+
+# Decompilation output
+decompiled_*.txt
+*.bin
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Large files
+*.pack
+*.scene
+*.mesh
+*.wav
+*.ogg
+*.mp3
+*.flac
+
+# Edith backup files
+*.bak
+*.corrupt
