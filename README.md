@@ -1,8 +1,19 @@
+<div align="center">
+  <img src="assets/mini_logo.png" alt="EML" width="128">
+  <br>
+  <small><i>logo drawn by my friend men, don't ask her for another one she'll say no</i></small>
+  <br><br>
+  <p><strong>Edith Mod Loader for Haydee</strong></p>
+  <p>
+    <a href="https://github.com/iluxz/EML"><img src="https://img.shields.io/github/actions/workflow/status/iluxz/EML/build.yml?branch=main&label=build&logo=github" alt="Build"></a>
+    <a href="https://github.com/iluxz/EML/releases"><img src="https://img.shields.io/github/v/release/iluxz/EML?logo=github" alt="Release"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/iluxz/EML?label=license" alt="License"></a>
+  </p>
+</div>
+
+---
+
 # EML - Edith Mod Loader
-
-![EML Banner](assets/eml_logo.png)
-
-![EML Logo](assets/mini_logo.png)
 
 Mod loader and tools for **Haydee** (the game), built by reverse engineering `edith.exe` and `haydee.dll`.
 
@@ -57,3 +68,12 @@ Place additional mod DLLs in `Haydee\Mods\`.
 This project reverse-engineers Haydee's engine for modding purposes. All decompiled code and extracted assets are kept private. Only original code and documentation are published.
 
 Haydee is developed by Haydee Interactive. This is an unofficial modding tool.
+
+---
+
+<div align="center">
+  <p>built with <code>:3</code> and a concerning amount of coffee</p>
+  <p>
+    <a href="https://github.com/iluxz/EML">github.com/iluxz/EML</a>
+  </p>
+</div>
