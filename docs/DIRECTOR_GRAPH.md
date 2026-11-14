@@ -162,8 +162,9 @@ node name is free text — `Enable Enable` is just convention.
 namespace, and **it persists across maps and across save/load**.
 
 - Names are arbitrary strings (`ThirdBool`, `BWord`, `DLiftLevel`, `OpenDaDoor`).
-- `ReadBool`/`ReadInt` have a `default`/comparison value used when the flag
-  has never been written.
+- A flag only exists once something writes it. A `ReadBool`/`ReadInt` pointed at
+  a name no map has ever written produces **no output at all** — neither `True`
+  nor `False` fires, and nothing is logged. The graph does not invent a value.
 - This is the only way to carry state between scenes, so it's what every
   multi-part puzzle and every "you already did this" shortcut uses.
 
@@ -188,6 +189,23 @@ Two polarities, both useful:
 
 `WriteBool` also has a `Toggle` input pin, so a button can flip a flag without
 caring about its current value.
+
+### Missing flags don't error — they just aren't there yet
+
+Edith never complains about a flag nobody wrote. A `ReadBool` on `FifthBool`
+before any map has set `FifthBool` fires nothing: no `True`, no `False`, no
+console noise, no broken graph. It sits inert until the flag exists, then starts
+working with no edits.
+
+That's deliberate, and it's why a big hub map can be wired against progression
+that isn't finished yet — write the readers now, land the writers later, and the
+links stay quiet in between. A "dead" read is not a bug; it's a read waiting for
+its writer.
+
+`Toggle` is a one-shot too. It flips the actor's state at the moment it fires
+and that's the entire job — the graph doesn't store it, replay it, or re-apply
+it on the next load. `Startup -> Enable.Toggle` toggles once when the map opens
+and then stops; it does not stack up across sessions.
 
 ### Multi-stage doors
 
@@ -316,6 +334,12 @@ Edith is strict about actor names and gives almost no error feedback:
   to be sequential.
 - If a graph "does nothing", check the node's `source`/`target` string against
   the actual actor name character for character. That's the cause ~90% of the time.
+- A read wired to a flag **nothing writes yet** is quiet by design, not broken.
+  Leave it alone — it wakes up on its own the first time a map writes that flag.
+- Edith's default reaction to something it can't resolve is to *skip it*, not to
+  throw. Silent no-ops are normal. The only things that actually break a map are
+  bad encoding (UTF-8 instead of UTF-16LE), hyphens in referenced names, and
+  unknown node classes.
 
 ---
 
@@ -568,6 +592,68 @@ Bot(source=SlasherA) -> OnTarget -> BotState(target=SlasherA, state=2).Input
 `state` is an int: 0–3 slashers, 0–2 walkers. `Bot` only exposes `OnTarget` in
 shipped maps.
 
+### 21. Convergence hub — one map, every flag
+
+The pattern that makes a multi-map campaign feel continuous: the hub map reads
+every flag the other maps can write, all from a single `Startup`.
+
+```
+Startup -> ReadBool(source=FlagA) -> Enable(target=IslandA).Enable
+                                 -> Enable(target=ClimbA).Enable
+        -> ReadBool(source=FlagB) -> Enable(target=IslandB).Enable
+        -> ReadBool(source=FlagC) -> Enable(target=IslandC).Enable
+        -> ReadBool(source=FlagD) -> Enable(target=IslandD).Enable
+```
+
+One `Startup` fans out to four `ReadBool` nodes, and each `ReadBool` fans out to
+its geometry. No cloning, no ordering requirement. Flags nobody has written yet
+just stay silent, so the hub is safe to build before the rest of the campaign
+exists.
+
+### 22. Arrival stamp — "which way did the player come in?"
+
+A small map that only exists to record direction of travel. Two lifts to the
+same hub each stamp their own flag on load, and the hub branches on it:
+
+```
+(ToBoiler)  Startup -> WriteBool(target=CameFromBoiler).True
+(ToGate)    Startup -> WriteBool(target=CameFromGate).True
+
+(hub)       Startup -> ReadBool(source=CameFromBoiler) -> True -> Enable(target=BoilerDoor).Disable
+```
+
+Useful when the same entry point should behave differently depending on where
+the player came from, and the level has no distinct entry markers to key off.
+
+### 23. Cascade restore — chains of shortcuts
+
+When shortcut N+1 supersedes shortcut N, restoring them is a cascade: enabling
+one disables the one before it, so the player always ends up on the newest
+route instead of all of them stacked.
+
+```
+Startup -> ReadBool(source=FourthBool) -> Enable(target=Shortcut4).Enable
+                                       -> Enable(target=Old4).Disable
+        -> ReadBool(source=FifthBool)  -> Enable(target=Shortcut5).Enable
+                                       -> Enable(target=Shortcut4).Disable
+        -> ReadBool(source=SixthBool)  -> Enable(target=Shortcut6).Enable
+                                       -> Enable(target=Shortcut5).Disable
+```
+
+Every branch is independent, so the order they fire in doesn't matter — the
+highest flag that exists wins. If your shortcut list ever grows, append a branch
+and update only the "disable the previous one" target.
+
+### 24. Component-scoped trigger
+
+```
+Trigger(source=Trig.TriggerAmb) -> Enable(target=Ambush).Enable
+```
+
+`Actor.Component` in `source` fires on that one component only. Use it when the
+actor carries several triggers and you don't want all of them, or when the same
+actor also does something else.
+
 ---
 
 # Part III — Reference tables
@@ -617,7 +703,7 @@ what feeds it.
 | `sound` | quoted path | GameFX, Travel, SceneFX | `"Sounds\Common\Door.sound"` |
 | `scene` | scene name | Travel | no quotes |
 | `entry` | actor name | Travel | entry marker in the destination scene |
-| `default` | bool | ReadBool | value used when flag never written (`false` in 85 of 88 maps) |
+| `default` | bool | ReadBool | declared fallback value (`false` in 85 of 88 maps). In practice a flag nothing has written produces **no** output rather than a `false` — see §6 |
 | `value` | int | WriteInt, ReadInt, AddInt | `WriteInt` sets it, `ReadInt` compares against it, `AddInt` adds it |
 | `state` | int | BotState | 0–3 slasher, 0–2 walker |
 | `alias` | string | Achieve, Custom | `HDFree`, `EndGame`, `WordNude`, … |
@@ -654,7 +740,9 @@ Edith is unforgiving here, so run these checks every time:
 
 | symptom | usual cause |
 |---|---|
-| node does nothing | `source`/`target` string doesn't match an actor name exactly (case-sensitive, no hyphen) |
+| node does nothing | `source`/`target` string doesn't match an actor name exactly (case-sensitive, no hyphen) — **or** it reads a flag no map has written yet, which is normal |
+| read never fires | the flag it reads has never been written. Wire the writer and it starts working; no other change needed |
+| `Toggle` fired but state came back later | `Toggle` is a one-shot action, not stored state — nothing re-applies it. Re-apply from `Startup` if you want it every load |
 | works in editor, dead in game | node left in uncompiled `.edith` and the `.scene` is stale — recompile |
 | fires twice | trigger volume overlaps two actors, or two `Trigger` nodes on the same volume |
 | fires once then never again | `Once` upstream, or a `WriteBool` guard already set from a previous session |
