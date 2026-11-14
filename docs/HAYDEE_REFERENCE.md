@@ -82,9 +82,21 @@ game
 - Decals clip on non-continuous geometry (individual tile brushes)
 
 ### Director Graph
-- Nodes can connect to multiple nodes by dragging multiple lines from same output
-- Gate nodes are for branching (not strictly required)
-- Nodes: Enable, Disable, Toggle, Travel, etc.
+Full reference: **[DIRECTOR_GRAPH.md](DIRECTOR_GRAPH.md)** — all 34 node classes,
+their pins and props, wiring rules, and the standard patterns.
+
+The short version:
+- H1 registers exactly **34** node classes (`Enable`, `Button`, `WriteBool`, …)
+- **Enable / Disable / Toggle are input pins on the `Enable` node**, not separate nodes
+- One output pin can be wired to **unlimited** inputs, and one input pin accepts
+  unlimited links and fires on any of them — branching needs no cloned nodes
+- Actions continue through a `Repeat` output; `Once` and `Delay` use `Output`
+- `WriteBool`/`ReadBool`/`WriteInt`/`ReadInt`/`AddInt` share one global,
+  save-persistent store — that's how state survives across maps
+- Sound: prefer the `EnableSound` component (`source` = actor name) over
+  duplicating a `GameFX` node per event
+- `Lock`/`Locked` are about freezing moving `Transform` geometry, **not** keys;
+  keycard readers use `Locker`
 
 ### Sound Components
 - `Sound` component (not Background) for triggered SFX

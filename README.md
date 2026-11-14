@@ -85,6 +85,7 @@ See `modloader/payload.c` for an example of how hooks work.
 ## Documentation
 
 - [Haydee Format Reference](docs/HAYDEE_REFERENCE.md) — file formats, engine quirks, RE findings
+- [Director Graph Reference](docs/DIRECTOR_GRAPH.md) — all 34 node classes, pins, props, wiring rules, patterns
 - [Mod Plan](docs/EDITH_MOD_PLAN.md) — roadmap and feature tiers
 
 ## Disclaimer
